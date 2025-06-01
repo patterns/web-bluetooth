@@ -59,7 +59,7 @@ function handleNotifications(event) {
   let value = event.target.value;
   let a = [];
 
-  if (value) { newAlarm(); }
+  if (value.getUint16() >0) { newAlarm(); }
 
   // Convert raw data bytes to hex values just for the sake of showing something.
   // In the "real" world, you'd use data.getUint8, data.getUint16 or even
