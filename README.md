@@ -19,23 +19,38 @@ This is a demo of the BLE Notify support on the Nano 33 BLE.
  ls ~/Arduino/Libraries/<PROJECT_NAME>/examples/nano_ble33_sense/nano_ble33_sense_microphone
 ```
 4. Make your changes for BLE (or [use ours](https://github.com/patterns/certification/blob/28fe69ef87690d60916bce50de26ca7d3f8f3eb2/ace/eep564/proj/nano_ble33_sense_microphone.ino))
-5. Flash the sketch to the Nano:
+5. Include the ArduinoBLE library:
+```bash
+arduino-cli lib install ArduinoBLE
+```
+6. Flash the sketch to the Nano:
 ```bash
  cd ~/Arduino/libraries/<PROJECT_NAME>/examples/nano_ble33_sense && \
     arduino-cli compile --fqbn arduino:mbed_nano:nano33ble nano_ble33_sense_microphone
  cd ~/Arduino/libraries/<PROJECT_NAME>/examples/nano_ble33_sense && \
     arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:mbed_nano:nano33ble nano_ble33_sense_microphone
 ```
-6. Start the serial comm to monitor the inference scores:
+7. Start the serial comm to monitor the inference scores:
 ```bash
  arduino-cli monitor -p /dev/ttyACM0 --fqbn arduino:mbed_nano:nano33ble
 ```
-7. From your mobile device (supports Bluetooth), navigate to this page; it's just static HTML so you can run a local file server (or [use gh-pages](https://patterns.github.io/web-bluetooth/))
+8. From your mobile device (supports Bluetooth), navigate to this page; it's just static HTML so you can run a local file server (or [use gh-pages](https://patterns.github.io/web-bluetooth/))
 
+
+### Configuration
+- In our sketch, we define a `THRESHOLD_ALARM` value of 0.6 for alarm scores to meet in order to publish an event. You may want to adjust this for your noise scenarios.
+- As the comment suggested, we disable the `EIDSP_QUANTIZE_FILTERBANK` macro to save 10K of memory.
+- Also in the comments, we created the `boards.local.txt` to pass the build flag. We had the mbed core used in EI flash_linux.sh steps (other homework), as well as mbed_nano core (for Arduino sketches). So we made two copies of the `boards.local.txt`:
+```bash
+cat boards.local.txt
+nano33ble.build.extra_flags= -DEI_CLASSIFIER_ALLOCATION_STATIC
+cp boards.local.txt ~/.arduino15/packages/arduino/hardware/mbed/3.3.0/
+cp boards.local.txt ~/.arduino15/packages/arduino/hardware/mbed_nano/4.2.4/
+```
 
 ### Caveats
-Inside the Arduino library (.zip), there are two microphone examples. The `_continuous` version does not work with the BLE modified sketch. So double-check which one you are using, if you encounter errors about adjusting the "slices" per window.
-
+- Inside the Arduino library (.zip), there are two microphone examples. The `_continuous` version does not work with the BLE modified sketch. So double-check which one you are using, if you encounter errors about adjusting the "slices" per window.
+- When using the scanner in the nRF Connect app from Nordic Semiconductor, you may not see the Nano peripheral unless you know the MAC address. There must be API calls in the ArduinoBLE library to specify the name to advertise. I didn't understand this at first, and didn't know the MAC address so thought the Nano was not showing in the scan results.
 
 ### Credits
 Bluetooth Notifications demo
