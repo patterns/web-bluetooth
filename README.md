@@ -3,7 +3,7 @@
 ### What is this?
 This is a demo of the BLE Notify support on the Nano 33 BLE.
  The Nano is the peripheral with the alarm service and alarm characteristic.
- Then when you navicate to this static HTML page on your mobile device's Chrome browser, it acts as the Android central role. Waiting for notifications from the Nano.
+ Then when you navigate to this static HTML page on your mobile device's Chrome browser, it acts as the Android central role. Waiting for notifications from the Nano.
 
 ![mobile page](screen-mobile.png)
  
@@ -30,6 +30,12 @@ This is a demo of the BLE Notify support on the Nano 33 BLE.
 ```bash
  arduino-cli monitor -p /dev/ttyACM0 --fqbn arduino:mbed_nano:nano33ble
 ```
+7. From your mobile device (supports Bluetooth), navigate to this page; it's just static HTML so you can run a local file server (or [use gh-pages](https://patterns.github.io/web-bluetooth/))
+
+
+### Caveats
+Inside the Arduino library (.zip), there are two microphone examples. The `_continuous` version does not work with the BLE modified sketch. So double-check which one you are using, if you encounter errors about adjusting the "slices" per window.
+
 
 ### Credits
 Bluetooth Notifications demo
