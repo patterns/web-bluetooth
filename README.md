@@ -18,7 +18,7 @@ This is a demo of the BLE Notify support on the Nano 33 BLE.
 ```bash
  ls ~/Arduino/Libraries/<PROJECT_NAME>/examples/nano_ble33_sense/nano_ble33_sense_microphone
 ```
-4. Make your changes for BLE (or [use ours](https://github.com/patterns/certification/blob/28fe69ef87690d60916bce50de26ca7d3f8f3eb2/ace/eep564/proj/EEP564_Project-Audio_Classification_-_Home_Security_inferencing/examples/nano_ble33_sense/nano_ble33_sense_microphone/nano_ble33_sense_microphone.ino)
+4. Make your changes for BLE (or [use ours](https://github.com/patterns/certification/blob/28fe69ef87690d60916bce50de26ca7d3f8f3eb2/ace/eep564/proj/nano_ble33_sense_microphone.ino))
 5. Flash the sketch to the Nano:
 ```bash
  cd ~/Arduino/libraries/<PROJECT_NAME>/examples/nano_ble33_sense && \
