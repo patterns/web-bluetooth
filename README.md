@@ -8,7 +8,7 @@ This is a demo of the BLE Notify support on the Nano 33 BLE.
 ![mobile page](screen-mobile.png)
  
 ### Quickstart
-0. You need a Edge Impulse project (or [use ours](https://studio.edgeimpulse.com/public/699161/live))
+0. You need an Edge Impulse project (or [use ours](https://studio.edgeimpulse.com/public/699161/live))
 1. From Edge Impulse: Deployment, choose the Arduino library for the build target.
 2. Add the resulting (.zip) file as a library in the Arduino workspace:
 ```bash
@@ -51,6 +51,7 @@ cp boards.local.txt ~/.arduino15/packages/arduino/hardware/mbed_nano/4.2.4/
 ### Caveats
 - Inside the Arduino library (.zip), there are two microphone examples. The `_continuous` version does not work with the BLE modified sketch. So double-check which one you are using, if you encounter errors about adjusting the "slices" per window.
 - When using the scanner in the nRF Connect app from Nordic Semiconductor, you may not see the Nano peripheral unless you know the MAC address. There must be API calls in the ArduinoBLE library to specify the name to advertise. I didn't understand this at first, and didn't know the MAC address so thought the Nano was not showing in the scan results.
+- The notify subscription takes 14 * 2 seconds to initialize (so alarms in that period will not be received by central).
 
 ### Credits
 Bluetooth Notifications demo
