@@ -1,0 +1,85 @@
+@startuml Nano33BLE
+hide footbox
+skinparam Shadowing false
+
+participant "User"                as UU  #CornflowerBlue
+participant "Central(Web)"        as WW  #ADD1B2
+box "Nano"
+participant "alarmService"        as SV  #white
+participant "alarmCharacteristic" as CH  #white
+participant "Arduino"             as FS    << (A,#FFB700) Sys >> order 2
+participant "Bluetooth"           as BLE   << (B,#FFB700) I/O >> order 3
+end box
+
+SV -/ SV :suuid
+activate SV #white
+CH -/ CH :cuuid,BLERead|BLENotify
+activate CH #white
+
+group setup
+autonumber
+FS -> BLE :begin()
+FS -> BLE :setAdvertisedService(alarmService)
+SV -> CH :addCharacteristic(alarmCharacteristic)
+FS -> BLE :addService(alarmService)
+FS -> CH :writeValue(3)
+FS -> BLE :advertise()
+autonumber stop
+end alt
+
+loop
+FS -\ BLE :central()
+BLE --/ FS :BLEDevice
+break central absent
+  FS -/ FS :delay 1 sec
+  note right
+   When a central device connection
+   is not active, we exit the loop after 1000ms.
+  end note
+end break
+
+UU -> WW :click
+WW -// WW :bluetooth.requestDevice()
+WW -\\ FS :gatt.connect()
+FS --// WW :server
+
+alt central connected
+  WW -\\ FS :getPrimaryService(suuid)
+  FS --// WW :alarmService
+  WW -\\ SV :getCharacteristic(cuuid)
+  SV --// WW :alarmCharacteristic
+  WW -\\ CH :startNotifications()
+  note left
+   When the central device sends
+   the notify request, the Nano
+   takes 14*2 seconds to establish
+   the subscription (so any alarms
+   during this period will not be
+   published to central.)
+  end note
+  FS -/ FS :delay 2 sec
+  note right
+   When a central device connection
+   is active, we start inference after 2000ms.
+  end note
+  FS -/ FS :microphone_inference_record
+  FS -/ FS :run_classifier
+  FS -\ CH :value()
+  CH --/ FS :byte[]
+  alt
+  else "score crosses threshold"
+    FS -> CH :writeCharacteristic(1)
+    CH ->> SV :event
+    SV ->> BLE :event
+    BLE ->> WW :event
+    WW -> UU :display alarm
+  else "score within threshold"
+
+    FS -> CH :writeCharacteristic(0)
+
+  end alt
+end alt
+
+end loop
+
+@enduml
