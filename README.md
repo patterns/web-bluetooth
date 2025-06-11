@@ -53,6 +53,9 @@ cp boards.local.txt ~/.arduino15/packages/arduino/hardware/mbed_nano/4.2.4/
 - When using the scanner in the nRF Connect app from Nordic Semiconductor, you may not see the Nano peripheral unless you know the MAC address. There must be API calls in the ArduinoBLE library to specify the name to advertise. I didn't understand this at first, and didn't know the MAC address so thought the Nano was not showing in the scan results.
 - The notify subscription takes 14 * 2 seconds to initialize (so alarms in that period will not be received by central).
 
+### Diagram
+![BLENotify detail](sequence-nano33ble.svg)
+
 ### Credits
 Bluetooth Notifications demo
  by [Google](https://github.com/project-idx/templates/tree/main/gemini)
